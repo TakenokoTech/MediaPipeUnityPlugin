@@ -16,7 +16,7 @@ namespace Mediapipe.Unity
     [SerializeField] private Texture[] _availableSources;
     [SerializeField] private ResolutionStruct[] _defaultAvailableResolutions;
 
-    private Texture2D _outputTexture;
+    private Texture _outputTexture;
     private Texture _image;
     private Texture image
     {
@@ -42,6 +42,8 @@ namespace Mediapipe.Unity
 
     private bool _isPlaying = false;
     public override bool isPlaying => _isPlaying;
+
+    public void SetOutputTexture(Texture texture) => _outputTexture = texture;
 
     private void Start()
     {
@@ -112,7 +114,7 @@ namespace Mediapipe.Unity
 
     private void InitializeOutputTexture(Texture src)
     {
-      _outputTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
+      var outputTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
 
       Texture resizedTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
       // TODO: assert ConvertTexture finishes successfully
@@ -123,9 +125,11 @@ namespace Mediapipe.Unity
       Graphics.Blit(resizedTexture, tmpRenderTexture);
       RenderTexture.active = tmpRenderTexture;
 
-      var rect = new UnityEngine.Rect(0, 0, _outputTexture.width, _outputTexture.height);
-      _outputTexture.ReadPixels(rect, 0, 0);
-      _outputTexture.Apply();
+      var rect = new UnityEngine.Rect(0, 0, outputTexture.width, outputTexture.height);
+      outputTexture.ReadPixels(rect, 0, 0);
+      outputTexture.Apply();
+
+      _outputTexture = outputTexture;
 
       RenderTexture.active = currentRenderTexture;
     }
