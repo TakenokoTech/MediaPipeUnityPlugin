@@ -20,6 +20,8 @@ namespace Mediapipe.Unity
     [SerializeField] private Color _leftLandmarkColor = Color.green;
     [SerializeField] private Color _rightLandmarkColor = Color.green;
 
+    public Hand hand;
+
     public enum Hand
     {
       Left,
@@ -106,6 +108,7 @@ namespace Mediapipe.Unity
 
     public void SetHandedness(Hand handedness)
     {
+      hand = handedness;
       if (handedness == Hand.Left)
       {
         _landmarkListAnnotation.SetColor(_leftLandmarkColor);
